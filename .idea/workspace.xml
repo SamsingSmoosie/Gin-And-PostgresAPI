@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02099c54-d91a-4af9-bfb3-a0e91e627d95" name="Changes" comment="-Minor edits to location or content">
-      <change beforePath="$PROJECT_DIR$/dbpop/controller.go" beforeDir="false" />
+    <list default="true" id="02099c54-d91a-4af9-bfb3-a0e91e627d95" name="Changes" comment="-controller File removed">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -144,7 +146,9 @@
     <MESSAGE value="-Cleaned up main file" />
     <MESSAGE value="-Created own file for gin gonic routers" />
     <MESSAGE value="-Minor edits to location or content" />
-    <option name="LAST_COMMIT_MESSAGE" value="-Minor edits to location or content" />
+    <MESSAGE value="-Auto creation and population of db added" />
+    <MESSAGE value="-controller File removed" />
+    <option name="LAST_COMMIT_MESSAGE" value="-controller File removed" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

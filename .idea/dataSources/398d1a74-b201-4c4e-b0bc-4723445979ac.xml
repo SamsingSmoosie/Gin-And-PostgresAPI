@@ -3,7 +3,7 @@
   <database-model serializer="dbm" dbms="POSTGRES" family-id="POSTGRES" format-version="4.51">
     <root id="1">
       <DateStyle>mdy</DateStyle>
-      <IntrospectionStateNumber>2844</IntrospectionStateNumber>
+      <IntrospectionStateNumber>3102</IntrospectionStateNumber>
       <ServerVersion>10.5</ServerVersion>
       <StartupTime>1707126258</StartupTime>
       <TimeZones>true ACDT
@@ -1417,7 +1417,7 @@ false posixrules
 12703||10|C|G
 12703||-9223372036854775808|U|G
 12703||10|U|G</Grants>
-      <IntrospectionStateNumber>2844</IntrospectionStateNumber>
+      <IntrospectionStateNumber>3102</IntrospectionStateNumber>
       <ObjectId>12994</ObjectId>
       <OwnerName>postgres</OwnerName>
     </database>
@@ -1472,52 +1472,52 @@ false posixrules
     <schema id="13" parent="2" name="public">
       <Comment>standard public schema</Comment>
       <Current>1</Current>
-      <IntrospectionStateNumber>2844</IntrospectionStateNumber>
-      <LastIntrospectionLocalTimestamp>2024-02-06.12:30:46</LastIntrospectionLocalTimestamp>
+      <IntrospectionStateNumber>3102</IntrospectionStateNumber>
+      <LastIntrospectionLocalTimestamp>2024-02-06.12:42:36</LastIntrospectionLocalTimestamp>
       <ObjectId>2200</ObjectId>
       <StateNumber>352</StateNumber>
       <OwnerName>postgres</OwnerName>
     </schema>
     <table id="14" parent="13" name="friends">
-      <ObjectId>24901</ObjectId>
-      <StateNumber>2738</StateNumber>
+      <ObjectId>24949</ObjectId>
+      <StateNumber>2996</StateNumber>
       <OwnerName>postgres</OwnerName>
     </table>
     <table id="15" parent="13" name="people">
-      <ObjectId>24893</ObjectId>
-      <StateNumber>2738</StateNumber>
+      <ObjectId>24941</ObjectId>
+      <StateNumber>2996</StateNumber>
       <OwnerName>postgres</OwnerName>
     </table>
     <table id="16" parent="13" name="person_friend_map">
-      <ObjectId>24925</ObjectId>
-      <StateNumber>2738</StateNumber>
+      <ObjectId>24957</ObjectId>
+      <StateNumber>2996</StateNumber>
       <OwnerName>postgres</OwnerName>
     </table>
     <column id="17" parent="14" name="id">
       <DasType>varchar|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>2507</StateNumber>
+      <StateNumber>2890</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="18" parent="14" name="name_first">
       <DasType>varchar|0s</DasType>
       <Position>2</Position>
-      <StateNumber>2507</StateNumber>
+      <StateNumber>2890</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="19" parent="14" name="name_last">
       <DasType>varchar|0s</DasType>
       <Position>3</Position>
-      <StateNumber>2507</StateNumber>
+      <StateNumber>2890</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <index id="20" parent="14" name="friends_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>24907</ObjectId>
+      <ObjectId>24955</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>2507</StateNumber>
+      <StateNumber>2890</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
       <CollationNames>default</CollationNames>
@@ -1526,156 +1526,156 @@ false posixrules
     </index>
     <key id="21" parent="14" name="friends_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>24908</ObjectId>
+      <ObjectId>24956</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>2507</StateNumber>
-      <UnderlyingIndexId>24907</UnderlyingIndexId>
+      <StateNumber>2890</StateNumber>
+      <UnderlyingIndexId>24955</UnderlyingIndexId>
     </key>
     <column id="22" parent="15" name="id">
       <DasType>varchar|0s</DasType>
       <NotNull>1</NotNull>
       <Position>1</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="23" parent="15" name="index">
       <DasType>integer|0s</DasType>
       <Position>2</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>23</TypeId>
     </column>
     <column id="24" parent="15" name="guid">
       <DasType>varchar|0s</DasType>
       <Position>3</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="25" parent="15" name="is_active">
       <DasType>boolean|0s</DasType>
       <Position>4</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>16</TypeId>
     </column>
     <column id="26" parent="15" name="balance">
       <DasType>varchar|0s</DasType>
       <Position>5</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="27" parent="15" name="picture">
       <DasType>varchar|0s</DasType>
       <Position>6</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="28" parent="15" name="age">
       <DasType>integer|0s</DasType>
       <Position>7</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>23</TypeId>
     </column>
     <column id="29" parent="15" name="eye_color">
       <DasType>varchar|0s</DasType>
       <Position>8</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="30" parent="15" name="name_first">
       <DasType>varchar|0s</DasType>
       <Position>9</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="31" parent="15" name="name_last">
       <DasType>varchar|0s</DasType>
       <Position>10</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="32" parent="15" name="gender">
       <DasType>varchar|0s</DasType>
       <Position>11</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="33" parent="15" name="company">
       <DasType>varchar|0s</DasType>
       <Position>12</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="34" parent="15" name="email">
       <DasType>varchar|0s</DasType>
       <Position>13</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="35" parent="15" name="phone">
       <DasType>varchar|0s</DasType>
       <Position>14</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="36" parent="15" name="address_house_number">
       <DasType>integer|0s</DasType>
       <Position>15</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>23</TypeId>
     </column>
     <column id="37" parent="15" name="address_street">
       <DasType>varchar|0s</DasType>
       <Position>16</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="38" parent="15" name="address_city">
       <DasType>varchar|0s</DasType>
       <Position>17</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="39" parent="15" name="address_state">
       <DasType>varchar|0s</DasType>
       <Position>18</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="40" parent="15" name="address_zip_code">
       <DasType>integer|0s</DasType>
       <Position>19</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>23</TypeId>
     </column>
     <column id="41" parent="15" name="about">
       <DasType>varchar|0s</DasType>
       <Position>20</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="42" parent="15" name="registered">
       <DasType>varchar|0s</DasType>
       <Position>21</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="43" parent="15" name="latitude">
       <DasType>double precision|0s</DasType>
       <Position>22</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>701</TypeId>
     </column>
     <column id="44" parent="15" name="longitude">
       <DasType>double precision|0s</DasType>
       <Position>23</Position>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <TypeId>701</TypeId>
     </column>
     <index id="45" parent="15" name="people_pkey">
       <ColNames>id</ColNames>
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>24899</ObjectId>
+      <ObjectId>24947</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>2471</StateNumber>
+      <StateNumber>2854</StateNumber>
       <Unique>1</Unique>
       <AccessMethodId>403</AccessMethodId>
       <CollationNames>default</CollationNames>
@@ -1684,36 +1684,36 @@ false posixrules
     </index>
     <key id="46" parent="15" name="people_pkey">
       <NameSurrogate>1</NameSurrogate>
-      <ObjectId>24900</ObjectId>
+      <ObjectId>24948</ObjectId>
       <Primary>1</Primary>
-      <StateNumber>2471</StateNumber>
-      <UnderlyingIndexId>24899</UnderlyingIndexId>
+      <StateNumber>2854</StateNumber>
+      <UnderlyingIndexId>24947</UnderlyingIndexId>
     </key>
     <column id="47" parent="16" name="person_id">
       <DasType>varchar|0s</DasType>
       <Position>1</Position>
-      <StateNumber>2738</StateNumber>
+      <StateNumber>2996</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <column id="48" parent="16" name="friend_id">
       <DasType>varchar|0s</DasType>
       <Position>2</Position>
-      <StateNumber>2738</StateNumber>
+      <StateNumber>2996</StateNumber>
       <TypeId>1043</TypeId>
     </column>
     <foreign-key id="49" parent="16" name="person_id_fk">
       <ColNames>person_id</ColNames>
-      <ObjectId>24931</ObjectId>
-      <StateNumber>2738</StateNumber>
+      <ObjectId>24963</ObjectId>
+      <StateNumber>2996</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>24893</RefTableId>
+      <RefTableId>24941</RefTableId>
     </foreign-key>
     <foreign-key id="50" parent="16" name="friend_id_fk">
       <ColNames>friend_id</ColNames>
-      <ObjectId>24936</ObjectId>
-      <StateNumber>2738</StateNumber>
+      <ObjectId>24968</ObjectId>
+      <StateNumber>2996</StateNumber>
       <RefKeyColPositions>1</RefKeyColPositions>
-      <RefTableId>24901</RefTableId>
+      <RefTableId>24949</RefTableId>
     </foreign-key>
   </database-model>
 </dataSource>
