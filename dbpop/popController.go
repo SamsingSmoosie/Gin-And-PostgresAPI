@@ -135,7 +135,6 @@ func insertPerson(db *sql.DB, p utils.Person) {
 	if err != nil {
 		log.Printf("Error inserting person: %v\n", err)
 	}
-
 }
 
 func insertFriends(db *sql.DB, p utils.Person) {
