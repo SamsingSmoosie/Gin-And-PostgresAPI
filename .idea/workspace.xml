@@ -4,19 +4,8 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02099c54-d91a-4af9-bfb3-a0e91e627d95" name="Changes" comment="-New Docker image containing Postgres Database added">
-      <change afterPath="$PROJECT_DIR$/dbpop/popController.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/router/router.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/PersonalData.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/PersonalData.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+    <list default="true" id="02099c54-d91a-4af9-bfb3-a0e91e627d95" name="Changes" comment="-Minor edits to location or content">
       <change beforePath="$PROJECT_DIR$/dbpop/controller.go" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/apiCalls.go" beforeDir="false" afterPath="$PROJECT_DIR$/utils/apiCalls.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -150,7 +139,12 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test" />
     <MESSAGE value="-New Docker image containing Postgres Database added" />
-    <option name="LAST_COMMIT_MESSAGE" value="-New Docker image containing Postgres Database added" />
+    <MESSAGE value="-New comments added" />
+    <MESSAGE value="-Database autopopulation added" />
+    <MESSAGE value="-Cleaned up main file" />
+    <MESSAGE value="-Created own file for gin gonic routers" />
+    <MESSAGE value="-Minor edits to location or content" />
+    <option name="LAST_COMMIT_MESSAGE" value="-Minor edits to location or content" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
