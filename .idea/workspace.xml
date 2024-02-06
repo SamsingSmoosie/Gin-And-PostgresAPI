@@ -4,10 +4,19 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02099c54-d91a-4af9-bfb3-a0e91e627d95" name="Changes" comment="test">
-      <change afterPath="$PROJECT_DIR$/data/docker-compose.yml" afterDir="false" />
+    <list default="true" id="02099c54-d91a-4af9-bfb3-a0e91e627d95" name="Changes" comment="-New Docker image containing Postgres Database added">
+      <change afterPath="$PROJECT_DIR$/dbpop/popController.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/router/router.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/sqldialects.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/sqldialects.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/PersonalData.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/PersonalData.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dbpop/controller.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/apiCalls.go" beforeDir="false" afterPath="$PROJECT_DIR$/utils/apiCalls.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,8 +26,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Go File" />
         <option value="Dockerfile" />
+        <option value="Go File" />
       </list>
     </option>
   </component>
@@ -55,6 +64,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;Go Build.go build Gin-Postgres-API.executor&quot;: &quot;Run&quot;,
     &quot;Go Build.go build Gin-Postgres-API/src.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
@@ -73,6 +83,9 @@
   &quot;keyToStringList&quot;: {
     &quot;DatabaseDriversLRU&quot;: [
       &quot;postgresql&quot;
+    ],
+    &quot;com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect&quot;: [
+      &quot;PostgreSQL&quot;
     ]
   }
 }</component>
@@ -82,8 +95,20 @@
       <recent name="C:\Users\LeonardoPagel\GolandProjects\Gin-Postgres-API\src" />
       <recent name="C:\Users\LeonardoPagel\GolandProjects\Gin-Postgres-API\data" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\LeonardoPagel\GolandProjects\Gin-Postgres-API" />
+    </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Go Build.go build Gin-Postgres-API">
+    <configuration name="go build Gin-Postgres-API" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="Gin-Postgres-API" />
+      <working_directory value="$PROJECT_DIR$" />
+      <kind value="PACKAGE" />
+      <package value="Gin-Postgres-API" />
+      <directory value="$PROJECT_DIR$" />
+      <filePath value="$PROJECT_DIR$/main.go" />
+      <method v="2" />
+    </configuration>
     <configuration name="go build Gin-Postgres-API/src" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="Gin-Postgres-API" />
       <working_directory value="$PROJECT_DIR$" />
@@ -95,6 +120,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Go Build.go build Gin-Postgres-API" />
         <item itemvalue="Go Build.go build Gin-Postgres-API/src" />
       </list>
     </recent_temporary>
@@ -123,7 +149,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test" />
-    <option name="LAST_COMMIT_MESSAGE" value="test" />
+    <MESSAGE value="-New Docker image containing Postgres Database added" />
+    <option name="LAST_COMMIT_MESSAGE" value="-New Docker image containing Postgres Database added" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
