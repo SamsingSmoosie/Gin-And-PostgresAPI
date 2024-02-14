@@ -1,7 +1,7 @@
 package router
 
 import (
-	"Gin-Postgres-API/utils"
+	"Gin-Postgres-API/internal/api"
 	"github.com/gin-gonic/gin"
 )
 
@@ -10,27 +10,32 @@ func InitRouter() *gin.Engine {
 	//Routers to responde to the API calls from memory
 	//To be changed to refer to db
 	r := gin.Default()
-	r.GET("/people", utils.GetPeople)
-	r.GET("/people/id/:id", utils.GetPersonByID)
-	r.GET("/people/index/:index", utils.GetPersonByIndex)
-	r.GET("/people/guid/:guid", utils.GetPersonByGUID)
-	r.GET("/people/isActive/:isActive", utils.GetPersonByIsActive)
-	r.GET("/people/balance/:balance", utils.GetPersonByBalance)
-	r.GET("/people/age/:age", utils.GetPersonByAge)
-	r.GET("/people/eyeColor/:eyeColor", utils.GetPersonByEyeColor)
-	//TODO router.GET("/people/name/:name", getPersonByName)
-	r.GET("/people/firstname/:firstname", utils.GetPersonByFirstName)
-	r.GET("/people/gender/:gender", utils.GetPersonByGender)
-	r.GET("/people/company/:company", utils.GetPersonByCompany)
-	r.GET("/people/email/:email", utils.GetPersonByEmail)
-	r.GET("/people/phoneNumber/:phone", utils.GetPersonByPhoneNumber)
-	//TODO router.GET("/people/address/:address", getPersonByAddress)
-	r.GET("/people/about/:about", utils.GetPersonByAbout)
-	r.GET("/people/registered/:registered", utils.GetPersonByRegistered)
-	r.GET("/people/latitude/:latitude", utils.GetPersonByLatitude)
-	r.GET("/people/longitude/:longitude", utils.GetPersonByLongitude)
+	r.GET("/people", api.GetPeople)
+	r.GET("/people/id/:id", api.GetPersonByID)
+	r.GET("/people/index/:index", api.GetPersonByIndex)
+	r.GET("/people/guid/:guid", api.GetPersonByGUID)
+	r.GET("/people/isActive/:isActive", api.GetPersonByIsActive)
+	r.GET("/people/balance/:balance", api.GetPersonByBalance)
+	r.GET("/people/age/:age", api.GetPersonByAge)
+	r.GET("/people/eyeColor/:eyeColor", api.GetPersonByEyeColor)
+	r.GET("/people/lastname/:lastname", api.GetPersonByLastName)
+	r.GET("/people/firstname/:firstname", api.GetPersonByFirstName)
+	r.GET("/people/gender/:gender", api.GetPersonByGender)
+	r.GET("/people/company/:company", api.GetPersonByCompany)
+	r.GET("/people/email/:email", api.GetPersonByEmail)
+	r.GET("/people/phoneNumber/:phone", api.GetPersonByPhoneNumber)
+	r.GET("/people/housenumber/:housenumber", api.GetPersonByHousenumber)
+	r.GET("/people/streetname/:streetname", api.GetPersonByStreetname)
+	r.GET("/people/zipcode/:zipcode", api.GetPersonByZipcode)
+	r.GET("/people/city/:city", api.GetPersonByCity)
+	r.GET("/people/state/:state", api.GetPersonByState)
+	r.GET("/people/about/:about", api.GetPersonByAbout)
+	r.GET("/people/registered/:registered", api.GetPersonByRegistered)
+	r.GET("/people/latitude/:latitude", api.GetPersonByLatitude)
+	r.GET("/people/longitude/:longitude", api.GetPersonByLongitude)
 	//TODO router.GET("/people/friends/:friends", getPersonByFriends)
-	r.POST("/people", utils.PostPerson)
+
+	r.POST("/people", api.PostPerson)
 
 	return r
 }

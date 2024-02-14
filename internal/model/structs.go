@@ -1,4 +1,4 @@
-package utils
+package model
 
 type Friend struct {
 	ID   string `json:"id"`
