@@ -3,7 +3,6 @@ package api
 import (
 	"Gin-Postgres-API/internal/model"
 	"Gin-Postgres-API/internal/repository"
-	"database/sql"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -11,10 +10,8 @@ import (
 )
 
 var people []model.Person
-var repo, _ = repository.NewPostgresDB("localhost", 5432, "postgres", "TopSecret123!", "postgres")
-var db = repo.Db
 
-/*// ---------To be Removed once API calls db instead of Memory----------
+/*   ---------To be Removed once API calls db instead of Memory----------
 func GetJson(filepath string) {
 	file, err := os.ReadFile(filepath)
 	if err != nil {
@@ -26,29 +23,21 @@ func GetJson(filepath string) {
 	}
 }
 
-//--------------------------------------------------------------------
-*/
+*/ //--------------------------------------------------------------------
+
+type Api struct {
+	db *repository.Postgres
+}
+
+func NewAPI(db *repository.Postgres) *Api {
+	return &Api{db: db}
+}
 
 // GetPeople Returns all people
 func GetPeople(c *gin.Context) {
-	rows, err := db.Query("SELECT * FROM people")
+	people, err := repository.Postgres.GetPeople()
 	if err != nil {
 		log.Println(err)
-	}
-	defer func(rows *sql.Rows) {
-		err := rows.Close()
-		if err != nil {
-
-		}
-	}(rows)
-
-	for rows.Next() {
-		var a model.Person
-		err := rows.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
-		if err != nil {
-			log.Println(err)
-		}
-		people = append(people, a)
 	}
 	c.JSON(http.StatusOK, people)
 }

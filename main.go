@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Gin-Postgres-API/dbpop"
+	"Gin-Postgres-API/internal/api"
 	"Gin-Postgres-API/internal/repository"
 	"Gin-Postgres-API/router"
 	_ "github.com/lib/pq"
@@ -12,17 +12,11 @@ var JsonFile = "./data/PersonalData.json"
 
 func main() {
 
-	repo, err := repository.NewPostgresDB("localhost", 5432, "postgres", "TopSecret123!", "postgres")
+	db, err := repository.NewPostgresDB("localhost", 5432, "postgres", "TopSecret123!", "postgres")
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	db := repo.Db
-
-	err = dbpop.Create(JsonFile, db)
-	if err != nil {
-		log.Fatal(err)
-	}
+	api.NewAPI(db)
 
 	r := router.InitRouter()
 	err = r.Run("localhost:8080")
