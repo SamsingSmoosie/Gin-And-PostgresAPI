@@ -4,7 +4,10 @@ import (
 	"Gin-Postgres-API/internal/model"
 	"database/sql"
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"log"
+	"net/http"
+	"strconv"
 )
 
 type Postgres struct {
@@ -133,7 +136,7 @@ func (p *Postgres) insertMap(person model.Person) {
 	}
 }
 
-func (p *Postgres) GetPeople() ([]model.Person, error) {
+func (p *Postgres) GetPeople(c *gin.Context) ([]model.Person, error) {
 	var people []model.Person
 	rows, err := p.db.Query("SELECT * FROM people")
 	if err != nil {
@@ -149,5 +152,90 @@ func (p *Postgres) GetPeople() ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByID(c *gin.Context) (model.Person, error) {
+	db := p.db
+	id := c.Param("id")
+	row := db.QueryRow("SELECT * FROM people WHERE id = $1", id)
+	if row.Err() != nil {
+		c.Status(500)
+		log.Println(row.Err())
+	}
+
+	var a model.Person
+
+	err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+	if err != nil {
+		log.Println(err)
+	}
+	c.JSON(http.StatusOK, a)
+	return a, nil
+}
+
+func (p *Postgres) GetPersonByIndex(c *gin.Context) (model.Person, error) {
+	db := p.db
+	index, _ := strconv.Atoi(c.Param("index"))
+
+	row, err := db.Query("SELECT * FROM people WHERE index = $1", index)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+
+	var a model.Person
+
+	err = row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+	if err != nil {
+		log.Println(err)
+	}
+	c.JSON(http.StatusOK, a)
+	return a, nil
+}
+
+func (p *Postgres) GetPersonByGUID(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	guid := c.Param("guid")
+
+	row, err := db.Query("SELECT * FROM people WHERE guid = $1", guid)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByIsActive(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	isActive, _ := strconv.ParseBool(c.Param("isActive"))
+
+	row, err := db.Query("SELECT * FROM people WHERE is_active = $1", isActive)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
 	return people, nil
 }

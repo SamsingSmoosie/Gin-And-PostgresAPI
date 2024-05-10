@@ -2,10 +2,11 @@ package router
 
 import (
 	"Gin-Postgres-API/internal/api"
+	"Gin-Postgres-API/internal/repository"
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() *gin.Engine {
+func InitRouter(postgres *repository.Postgres) *gin.Engine {
 
 	//Routers to responde to the API calls from memory
 	//To be changed to refer to db
@@ -35,7 +36,7 @@ func InitRouter() *gin.Engine {
 	r.GET("/people/longitude/:longitude", api.GetPersonByLongitude)
 	//TODO router.GET("/people/friends/:friends", getPersonByFriends)
 
-	r.POST("/people", api.PostPerson)
+	//r.POST("/people", api.PostPerson)
 
 	return r
 }

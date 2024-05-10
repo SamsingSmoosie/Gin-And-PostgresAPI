@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-var people []model.Person
+//var people []model.Person
 
 /*   ---------To be Removed once API calls db instead of Memory----------
 func GetJson(filepath string) {
@@ -34,7 +34,7 @@ func NewAPI(db *repository.Postgres) *Api {
 }
 
 // GetPeople Returns all people
-func GetPeople(c *gin.Context) {
+func (a *Api) GetPeople(c *gin.Context) {
 	people, err := repository.Postgres.GetPeople()
 	if err != nil {
 		log.Println(err)
@@ -44,7 +44,7 @@ func GetPeople(c *gin.Context) {
 
 // PostPerson Can be used to add a person
 // Needs to be updated to only allow certain attributes to be imported by user
-func PostPerson(c *gin.Context) {
+/*func PostPerson(c *gin.Context) {
 	var newPerson model.Person
 
 	if err := c.BindJSON(&newPerson); err != nil {
@@ -53,94 +53,49 @@ func PostPerson(c *gin.Context) {
 
 	people = append(people, newPerson)
 	c.JSON(http.StatusCreated, newPerson)
-}
+}*/
 
 // GetPersonByID Returns one specific person by ID
-func GetPersonByID(c *gin.Context) {
-	db := repo.Db
-	id := c.Param("id")
-	row := db.QueryRow("SELECT * FROM people WHERE id = $1", id)
-	if row.Err() != nil {
-		c.Status(500)
-		log.Println(row.Err())
-		return
-	}
-
-	var a model.Person
-
-	err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+func (a *Api) GetPersonByID(c gin.Context) (model.Person, error) {
+	people, err := repository.Postgres.GetPersonByID()
 	if err != nil {
 		log.Println(err)
-		return
 	}
-	c.JSON(http.StatusOK, a)
+	c.JSON(http.StatusOK, people)
+	return people, nil
 }
 
 // GetPersonByIndex Returns one specific person by Index
-func GetPersonByIndex(c *gin.Context) {
-	db := repo.Db
-	index, _ := strconv.Atoi(c.Param("index"))
+func (a *Api) GetPersonByIndex(c *gin.Context) (model.Person, error) {
+	people, err := repository.Postgres.GetPersonByIndex()
 
-	row, err := db.Query("SELECT * FROM people WHERE index = $1", index)
-	if err != nil {
-		c.Status(500)
-		log.Println(err)
-		return
-	}
-
-	var a model.Person
-
-	err = row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 	if err != nil {
 		log.Println(err)
-		return
 	}
-	c.JSON(http.StatusOK, a)
+	c.JSON(http.StatusOK, people)
+	return people, nil
 }
 
 // GetPersonByGUID Returns every person with a specific GUID
-func GetPersonByGUID(c *gin.Context) {
-	db := repo.Db
-	guid := c.Param("guid")
+func (a *Api) GetPersonByGUID(c *gin.Context) ([]model.Person, error) {
+	people, err := repository.Postgres.GetPersonByGUID()
 
-	row, _ := db.Query("SELECT * FROM people WHERE guid = $1", guid)
-	if row.Err() != nil {
-		c.Status(500)
-		log.Println(row.Err())
-		return
-	}
-
-	for row.Next() {
-		var a model.Person
-		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
-		if err != nil {
-			log.Println(err)
-		}
-		people = append(people, a)
+	if err != nil {
+		log.Println(err)
 	}
 	c.JSON(http.StatusOK, people)
+	return people, nil
 }
 
 // GetPersonByIsActive Returns all people that are active or inactive, depending on input
-func GetPersonByIsActive(c *gin.Context) {
-	db := repo.Db
-	isActive, _ := strconv.ParseBool(c.Param("isActive"))
-	row, _ := db.Query("SELECT * FROM people WHERE is_active = $1", isActive)
-	if row.Err() != nil {
-		c.Status(500)
-		log.Println(row.Err())
-		return
-	}
+func (a *Api) GetPersonByIsActive(c *gin.Context) ([]model.Person, error) {
+	people, err := repository.Postgres.GetPersonByIsActive()
 
-	for row.Next() {
-		var a model.Person
-		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
-		if err != nil {
-			log.Println(err)
-		}
-		people = append(people, a)
+	if err != nil {
+		log.Println(err)
 	}
 	c.JSON(http.StatusOK, people)
+	return people, nil
 }
 
 // GetPersonByBalance Returns all people with a specific balance
