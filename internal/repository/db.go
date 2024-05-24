@@ -142,7 +142,12 @@ func (p *Postgres) GetPeople(c *gin.Context) ([]model.Person, error) {
 	if err != nil {
 		return nil, fmt.Errorf("query: %w", err)
 	}
-	defer rows.Close()
+	defer func(rows *sql.Rows) {
+		err := rows.Close()
+		if err != nil {
+
+		}
+	}(rows)
 
 	for rows.Next() {
 		var a model.Person
@@ -224,6 +229,396 @@ func (p *Postgres) GetPersonByIsActive(c *gin.Context) ([]model.Person, error) {
 	isActive, _ := strconv.ParseBool(c.Param("isActive"))
 
 	row, err := db.Query("SELECT * FROM people WHERE is_active = $1", isActive)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByBalance(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	balance, _ := strconv.ParseBool(c.Param("balance"))
+
+	row, err := db.Query("SELECT * FROM people WHERE balance = $1", balance)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByAge(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	age, _ := strconv.ParseBool(c.Param("age"))
+
+	row, err := db.Query("SELECT * FROM people WHERE age = $1", age)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByEyeColor(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	eyeColor, _ := strconv.ParseBool(c.Param("eyeColor"))
+
+	row, err := db.Query("SELECT * FROM people WHERE eye_color = $1", eyeColor)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByFirstName(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	firstname, _ := strconv.ParseBool(c.Param("firstname"))
+
+	row, err := db.Query("SELECT * FROM people WHERE name_first = $1", firstname)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByLastName(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	lastname, _ := strconv.ParseBool(c.Param("lastname"))
+
+	row, err := db.Query("SELECT * FROM people WHERE name_last = $1", lastname)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByGender(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	gender, _ := strconv.ParseBool(c.Param("gender"))
+
+	row, err := db.Query("SELECT * FROM people WHERE gender = $1", gender)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByCompany(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	company, _ := strconv.ParseBool(c.Param("company"))
+
+	row, err := db.Query("SELECT * FROM people WHERE company = $1", company)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByEmail(c *gin.Context) (model.Person, error) {
+	db := p.db
+	email := c.Param("email")
+	row := db.QueryRow("SELECT * FROM people WHERE email = $1", email)
+	if row.Err() != nil {
+		c.Status(500)
+		log.Println(row.Err())
+	}
+
+	var a model.Person
+
+	err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+	if err != nil {
+		log.Println(err)
+	}
+	c.JSON(http.StatusOK, a)
+	return a, nil
+}
+
+func (p *Postgres) GetPersonByPhoneNumber(c *gin.Context) (model.Person, error) {
+	db := p.db
+	phoneNumber := c.Param("phone")
+	row := db.QueryRow("SELECT * FROM people WHERE phone = $1", phoneNumber)
+	if row.Err() != nil {
+		c.Status(500)
+		log.Println(row.Err())
+	}
+
+	var a model.Person
+
+	err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+	if err != nil {
+		log.Println(err)
+	}
+	c.JSON(http.StatusOK, a)
+	return a, nil
+}
+
+func (p *Postgres) GetPersonByHouseNumber(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	houseNumber, _ := strconv.ParseBool(c.Param("housenumber"))
+
+	row, err := db.Query("SELECT * FROM people WHERE address_house_number = $1", houseNumber)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByStreetName(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	streetName, _ := strconv.ParseBool(c.Param("streetname"))
+
+	row, err := db.Query("SELECT * FROM people WHERE address_street = $1", streetName)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByZipCode(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	zipCode, _ := strconv.ParseBool(c.Param("zipcode"))
+
+	row, err := db.Query("SELECT * FROM people WHERE address_zip_code = $1", zipCode)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByCity(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	city, _ := strconv.ParseBool(c.Param("city"))
+
+	row, err := db.Query("SELECT * FROM people WHERE address_city = $1", city)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByState(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	state, _ := strconv.ParseBool(c.Param("state"))
+
+	row, err := db.Query("SELECT * FROM people WHERE address_state = $1", state)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByAbout(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	about, _ := strconv.ParseBool(c.Param("about"))
+
+	row, err := db.Query("SELECT * FROM people WHERE about = $1", about)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByRegistered(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	registered, _ := strconv.ParseBool(c.Param("registered"))
+
+	row, err := db.Query("SELECT * FROM people WHERE registered = $1", registered)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByLatitude(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	latitude, _ := strconv.ParseBool(c.Param("latitude"))
+
+	row, err := db.Query("SELECT * FROM people WHERE latitude = $1", latitude)
+	if err != nil {
+		c.Status(500)
+		log.Println(err)
+	}
+	for row.Next() {
+		var a model.Person
+		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		if err != nil {
+			log.Println(err)
+		}
+		people = append(people, a)
+	}
+	c.JSON(http.StatusOK, people)
+	return people, nil
+}
+
+func (p *Postgres) GetPersonByLongitude(c *gin.Context) ([]model.Person, error) {
+	var people []model.Person
+	db := p.db
+	longitude, _ := strconv.ParseBool(c.Param("longitude"))
+
+	row, err := db.Query("SELECT * FROM people WHERE longitude = $1", longitude)
 	if err != nil {
 		c.Status(500)
 		log.Println(err)

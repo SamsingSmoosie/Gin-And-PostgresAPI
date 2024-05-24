@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02099c54-d91a-4af9-bfb3-a0e91e627d95" name="Changes" comment="- Everything is burning atm&#10;- Reorganized the folder structure&#10;- Introduced the API Struct&#10;- Need to apply the API struct to the api calls">
+    <list default="true" id="02099c54-d91a-4af9-bfb3-a0e91e627d95" name="Changes" comment="- Everything is still burning">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/api/apiCalls.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/api/apiCalls.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/repository/db.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/db.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/router/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/router.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -163,7 +163,8 @@
     <MESSAGE value="- Docker compose updated to only start the container" />
     <MESSAGE value="- Compatibility updates with the new DB struct and api call methods" />
     <MESSAGE value="- Everything is burning atm&#10;- Reorganized the folder structure&#10;- Introduced the API Struct&#10;- Need to apply the API struct to the api calls" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Everything is burning atm&#10;- Reorganized the folder structure&#10;- Introduced the API Struct&#10;- Need to apply the API struct to the api calls" />
+    <MESSAGE value="- Everything is still burning" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Everything is still burning" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
