@@ -189,7 +189,6 @@ func (p *Postgres) GetPersonByID(id string) (model.Person, error) {
 	if row.Err() != nil {
 		return model.Person{}, row.Err()
 	}
-	defer row.Scan()
 	var a model.Person
 
 	err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
