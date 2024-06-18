@@ -12,22 +12,6 @@ type Handlers struct {
 	DB *repository.Postgres
 }
 
-//var people []model.Person
-
-/*   ---------To be Removed once API calls db instead of Memory----------
-func GetJson(filepath string) {
-	file, err := os.ReadFile(filepath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	err = json.Unmarshal(file, &people)
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-*/ //--------------------------------------------------------------------
-
 // GetPeople Returns all people
 func (h *Handlers) GetPeople(c *gin.Context) {
 	people, err := h.DB.GetPeople()

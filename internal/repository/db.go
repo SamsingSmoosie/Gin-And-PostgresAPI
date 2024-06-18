@@ -3,13 +3,17 @@ package repository
 import (
 	"Gin-Postgres-API/internal/model"
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 )
 
 type Postgres struct {
 	db *sql.DB
 }
+
+var people []model.Person
 
 func NewPostgresDB(host string, port int, user, password, dbname string) (*Postgres, error) {
 
@@ -31,8 +35,19 @@ func NewPostgresDB(host string, port int, user, password, dbname string) (*Postg
 	return &Postgres{db: openedDB}, err
 }
 
+func GetJson(filepath string) {
+	file, err := os.ReadFile(filepath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = json.Unmarshal(file, &people)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 // CreatePeople Check if table "people" exists. If not it will create the table and populate it
-func (p *Postgres) createPeople(people []model.Person) error {
+func (p *Postgres) CreatePeople() error {
 	_, tableCheck := p.db.Query("select * from people;")
 	if tableCheck == nil {
 		log.Println("Table people already exists")
@@ -51,7 +66,7 @@ func (p *Postgres) createPeople(people []model.Person) error {
 }
 
 // CreateFriends Check if table "friend" exists. If not it will create the table and populate it
-func (p *Postgres) createFriends(people []model.Person) error {
+func (p *Postgres) CreateFriends() error {
 	_, tableCheck := p.db.Query("select * from friends;")
 	if tableCheck == nil {
 		log.Println("Table friends already exists")
@@ -69,7 +84,7 @@ func (p *Postgres) createFriends(people []model.Person) error {
 }
 
 // CreateMap Check if table "person_friend_map" exists. If not it will create the table and populate it
-func (p *Postgres) createMap(people []model.Person) error {
+func (p *Postgres) CreateMap() error {
 	_, tableCheck := p.db.Query("select * from person_friend_map;")
 	if tableCheck == nil {
 		log.Println("Table person already exists")
@@ -160,14 +175,14 @@ func (p *Postgres) GetPeople() ([]model.Person, error) {
 func (p *Postgres) GetPersonByID(id int) (model.Person, error) {
 	row := p.db.QueryRow("SELECT * FROM people WHERE id = $1", id)
 	if row.Err() != nil {
-		log.Println(row.Err())
+		return model.Person{}, row.Err()
 	}
 
 	var a model.Person
 
 	err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 	if err != nil {
-		log.Println(err)
+		return model.Person{}, err
 	}
 	return a, nil
 }
@@ -175,15 +190,16 @@ func (p *Postgres) GetPersonByID(id int) (model.Person, error) {
 func (p *Postgres) GetPersonByIndex(index int) (model.Person, error) {
 	row, err := p.db.Query("SELECT * FROM people WHERE index = $1", index)
 	if err != nil {
-		log.Println(err)
+		return model.Person{}, err
 	}
 
 	var a model.Person
 
 	err = row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 	if err != nil {
-		log.Println(err)
+		return model.Person{}, err
 	}
+	log.Println(a)
 	return a, nil
 }
 
@@ -192,14 +208,14 @@ func (p *Postgres) GetPersonByGUID(guid string) ([]model.Person, error) {
 
 	row, err := p.db.Query("SELECT * FROM people WHERE guid = $1", guid)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -210,13 +226,13 @@ func (p *Postgres) GetPersonByIsActive(isActive bool) ([]model.Person, error) {
 	var people []model.Person
 	row, err := p.db.Query("SELECT * FROM people WHERE is_active = $1", isActive)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -228,13 +244,13 @@ func (p *Postgres) GetPersonByBalance(balance string) ([]model.Person, error) {
 
 	row, err := p.db.Query("SELECT * FROM people WHERE balance = $1", balance)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -246,13 +262,13 @@ func (p *Postgres) GetPersonByAge(age int) ([]model.Person, error) {
 
 	row, err := p.db.Query("SELECT * FROM people WHERE age = $1", age)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -264,13 +280,13 @@ func (p *Postgres) GetPersonByEyeColor(eyeColor string) ([]model.Person, error) 
 
 	row, err := p.db.Query("SELECT * FROM people WHERE eye_color = $1", eyeColor)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -282,13 +298,13 @@ func (p *Postgres) GetPersonByFirstName(firstname string) ([]model.Person, error
 
 	row, err := p.db.Query("SELECT * FROM people WHERE name_first = $1", firstname)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -300,13 +316,13 @@ func (p *Postgres) GetPersonByLastName(lastname string) ([]model.Person, error) 
 
 	row, err := p.db.Query("SELECT * FROM people WHERE name_last = $1", lastname)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -318,13 +334,13 @@ func (p *Postgres) GetPersonByGender(gender string) ([]model.Person, error) {
 
 	row, err := p.db.Query("SELECT * FROM people WHERE gender = $1", gender)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -336,13 +352,13 @@ func (p *Postgres) GetPersonByCompany(company string) ([]model.Person, error) {
 
 	row, err := p.db.Query("SELECT * FROM people WHERE company = $1", company)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -352,14 +368,14 @@ func (p *Postgres) GetPersonByCompany(company string) ([]model.Person, error) {
 func (p *Postgres) GetPersonByEmail(email string) (model.Person, error) {
 	row := p.db.QueryRow("SELECT * FROM people WHERE email = $1", email)
 	if row.Err() != nil {
-		log.Println(row.Err())
+		return model.Person{}, row.Err()
 	}
 
 	var a model.Person
 
 	err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 	if err != nil {
-		log.Println(err)
+		return model.Person{}, err
 	}
 	return a, nil
 }
@@ -367,14 +383,14 @@ func (p *Postgres) GetPersonByEmail(email string) (model.Person, error) {
 func (p *Postgres) GetPersonByPhoneNumber(phoneNumber string) (model.Person, error) {
 	row := p.db.QueryRow("SELECT * FROM people WHERE phone = $1", phoneNumber)
 	if row.Err() != nil {
-		log.Println(row.Err())
+		return model.Person{}, row.Err()
 	}
 
 	var a model.Person
 
 	err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 	if err != nil {
-		log.Println(err)
+		return model.Person{}, err
 	}
 	return a, nil
 }
@@ -384,13 +400,13 @@ func (p *Postgres) GetPersonByHouseNumber(houseNumber int) ([]model.Person, erro
 
 	row, err := p.db.Query("SELECT * FROM people WHERE address_house_number = $1", houseNumber)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -402,13 +418,13 @@ func (p *Postgres) GetPersonByStreetName(streetName string) ([]model.Person, err
 
 	row, err := p.db.Query("SELECT * FROM people WHERE address_street = $1", streetName)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -420,13 +436,13 @@ func (p *Postgres) GetPersonByZipCode(zipCode int) ([]model.Person, error) {
 
 	row, err := p.db.Query("SELECT * FROM people WHERE address_zip_code = $1", zipCode)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -438,13 +454,13 @@ func (p *Postgres) GetPersonByCity(city string) ([]model.Person, error) {
 
 	row, err := p.db.Query("SELECT * FROM people WHERE address_city = $1", city)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -456,13 +472,13 @@ func (p *Postgres) GetPersonByState(state string) ([]model.Person, error) {
 
 	row, err := p.db.Query("SELECT * FROM people WHERE address_state = $1", state)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -474,13 +490,13 @@ func (p *Postgres) GetPersonByAbout(about string) ([]model.Person, error) {
 
 	row, err := p.db.Query("SELECT * FROM people WHERE about = $1", about)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -492,13 +508,13 @@ func (p *Postgres) GetPersonByRegistered(registered bool) ([]model.Person, error
 
 	row, err := p.db.Query("SELECT * FROM people WHERE registered = $1", registered)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -510,13 +526,13 @@ func (p *Postgres) GetPersonByLatitude(latitude string) ([]model.Person, error) 
 
 	row, err := p.db.Query("SELECT * FROM people WHERE latitude = $1", latitude)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}
@@ -528,13 +544,13 @@ func (p *Postgres) GetPersonByLongitude(longitude string) ([]model.Person, error
 
 	row, err := p.db.Query("SELECT * FROM people WHERE longitude = $1", longitude)
 	if err != nil {
-		log.Println(err)
+		return []model.Person{}, err
 	}
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
-			log.Println(err)
+			return []model.Person{}, err
 		}
 		people = append(people, a)
 	}

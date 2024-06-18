@@ -4,16 +4,13 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02099c54-d91a-4af9-bfb3-a0e91e627d95" name="Changes" comment="- Everything is still burning">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
+    <list default="true" id="02099c54-d91a-4af9-bfb3-a0e91e627d95" name="Changes" comment="- Everything is awesome&#10;- Most the API is abled to startup&#10;- The API responds to requests&#10;- TODO: Add auto population of DB&#10;- TODO: Add friends structs and references">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/api/apiCalls.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/api/apiCalls.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/repository/db.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/db.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/router/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/router/router.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -183,7 +180,8 @@
     <MESSAGE value="- Compatibility updates with the new DB struct and api call methods" />
     <MESSAGE value="- Everything is burning atm&#10;- Reorganized the folder structure&#10;- Introduced the API Struct&#10;- Need to apply the API struct to the api calls" />
     <MESSAGE value="- Everything is still burning" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Everything is still burning" />
+    <MESSAGE value="- Everything is awesome&#10;- Most the API is abled to startup&#10;- The API responds to requests&#10;- TODO: Add auto population of DB&#10;- TODO: Add friends structs and references" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Everything is awesome&#10;- Most the API is abled to startup&#10;- The API responds to requests&#10;- TODO: Add auto population of DB&#10;- TODO: Add friends structs and references" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

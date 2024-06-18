@@ -14,6 +14,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	repository.GetJson("data/PersonalData.json")
+	db.CreatePeople()
+	db.CreateFriends()
+	db.CreateMap()
+
 	r := router.InitRouter(db)
 	err = r.Run("localhost:8080")
 	if err != nil {
