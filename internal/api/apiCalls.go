@@ -17,6 +17,10 @@ func (h *Handlers) GetPeople(c *gin.Context) {
 	people, err := h.DB.GetPeople()
 	if err != nil {
 		log.Println(err)
+		return
+	} else if people == nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "People not found"})
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
@@ -36,13 +40,10 @@ func (h *Handlers) GetPeople(c *gin.Context) {
 
 // GetPersonByID Returns one specific person by ID
 func (h *Handlers) GetPersonByID(c *gin.Context) {
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		log.Println(err)
-		return
-	}
+	id := c.Param("id")
 	people, err := h.DB.GetPersonByID(id)
 	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that ID found"})
 		log.Println(err)
 		return
 	}
@@ -58,6 +59,7 @@ func (h *Handlers) GetPersonByIndex(c *gin.Context) {
 	}
 	people, err := h.DB.GetPersonByIndex(index)
 	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that Index found"})
 		log.Println(err)
 		return
 	}
@@ -69,6 +71,7 @@ func (h *Handlers) GetPersonByGUID(c *gin.Context) {
 	guid := c.Param("guid")
 	people, err := h.DB.GetPersonByGUID(guid)
 	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that GUID found"})
 		log.Println(err)
 		return
 	}
@@ -77,7 +80,7 @@ func (h *Handlers) GetPersonByGUID(c *gin.Context) {
 
 // GetPersonByIsActive Returns all people that are active or inactive, depending on input
 func (h *Handlers) GetPersonByIsActive(c *gin.Context) {
-	isActive, err := strconv.ParseBool(c.Param("is_active"))
+	isActive, err := strconv.ParseBool(c.Param("isActive"))
 	if err != nil {
 		log.Println(err)
 		return
@@ -85,6 +88,10 @@ func (h *Handlers) GetPersonByIsActive(c *gin.Context) {
 	people, err := h.DB.GetPersonByIsActive(isActive)
 	if err != nil {
 		log.Println(err)
+		return
+	} else if people == nil {
+		log.Println("No entry with that activity state found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that activity state found"})
 		return
 	}
 	c.JSON(http.StatusOK, people)
@@ -96,6 +103,10 @@ func (h *Handlers) GetPersonByBalance(c *gin.Context) {
 	people, err := h.DB.GetPersonByBalance(balance)
 	if err != nil {
 		log.Println(err)
+		return
+	} else if people == nil {
+		log.Println("No entry with that balance found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that balance found"})
 		return
 	}
 	c.JSON(http.StatusOK, people)
@@ -109,9 +120,12 @@ func (h *Handlers) GetPersonByAge(c *gin.Context) {
 		return
 	}
 	people, err := h.DB.GetPersonByAge(age)
-
 	if err != nil {
 		log.Println(err)
+		return
+	} else if people == nil {
+		log.Println("No entry with that age found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that age found"})
 		return
 	}
 	c.JSON(http.StatusOK, people)
@@ -119,21 +133,14 @@ func (h *Handlers) GetPersonByAge(c *gin.Context) {
 
 // GetPersonByEyeColor Returns all people with a specific eyecolor
 func (h *Handlers) GetPersonByEyeColor(c *gin.Context) {
-	eyeColor := c.Param("eye_color")
+	eyeColor := c.Param("eyeColor")
 	people, err := h.DB.GetPersonByEyeColor(eyeColor)
 	if err != nil {
 		log.Println(err)
 		return
-	}
-	c.JSON(http.StatusOK, people)
-}
-
-// GetPersonByFirstName Returns all people with a specific firstname
-func (h *Handlers) GetPersonByFirstName(c *gin.Context) {
-	firstName := c.Param("first_name")
-	people, err := h.DB.GetPersonByFirstName(firstName)
-	if err != nil {
-		log.Println(err)
+	} else if people == nil {
+		log.Println("No entry with that eye color found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that eye color found"})
 		return
 	}
 	c.JSON(http.StatusOK, people)
@@ -141,10 +148,29 @@ func (h *Handlers) GetPersonByFirstName(c *gin.Context) {
 
 // GetPersonByLastName Returns all people with a specific lastname
 func (h *Handlers) GetPersonByLastName(c *gin.Context) {
-	lastName := c.Param("last_name")
+	lastName := c.Param("lastname")
 	people, err := h.DB.GetPersonByLastName(lastName)
 	if err != nil {
 		log.Println(err)
+		return
+	} else if people == nil {
+		log.Println("No entry with that lastname found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that lastname found"})
+		return
+	}
+	c.JSON(http.StatusOK, people)
+}
+
+// GetPersonByFirstName Returns all people with a specific firstname
+func (h *Handlers) GetPersonByFirstName(c *gin.Context) {
+	firstName := c.Param("firstname")
+	people, err := h.DB.GetPersonByFirstName(firstName)
+	if err != nil {
+		log.Println(err)
+		return
+	} else if people == nil {
+		log.Println("No entry with that firstname found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that firstname found"})
 		return
 	}
 	c.JSON(http.StatusOK, people)
@@ -157,6 +183,10 @@ func (h *Handlers) GetPersonByGender(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		return
+	} else if people == nil {
+		log.Println("No entry with that gender found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that gender found"})
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
@@ -168,6 +198,10 @@ func (h *Handlers) GetPersonByCompany(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		return
+	} else if people == nil {
+		log.Println("No entry with that company found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that company found"})
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
@@ -176,18 +210,20 @@ func (h *Handlers) GetPersonByCompany(c *gin.Context) {
 func (h *Handlers) GetPersonByEmail(c *gin.Context) {
 	email := c.Param("email")
 	people, err := h.DB.GetPersonByEmail(email)
-
 	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that ID found"})
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByPhoneNumber Returns the person with the specified phone number
 func (h *Handlers) GetPersonByPhoneNumber(c *gin.Context) {
-	phoneNumber := c.Param("phone_number")
+	phoneNumber := c.Param("phone")
 	people, err := h.DB.GetPersonByPhoneNumber(phoneNumber)
 	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that phone number found"})
 		log.Println(err)
 		return
 	}
@@ -205,6 +241,10 @@ func (h *Handlers) GetPersonByHousenumber(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		return
+	} else if people == nil {
+		log.Println("No entry with that house number found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that house number found"})
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
@@ -215,6 +255,10 @@ func (h *Handlers) GetPersonByStreetname(c *gin.Context) {
 	people, err := h.DB.GetPersonByStreetName(streetname)
 	if err != nil {
 		log.Println(err)
+		return
+	} else if people == nil {
+		log.Println("No entry with that streetname found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that streetname found"})
 		return
 	}
 	c.JSON(http.StatusOK, people)
@@ -231,6 +275,10 @@ func (h *Handlers) GetPersonByZipcode(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		return
+	} else if people == nil {
+		log.Println("No entry with that zipcode found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that zipcode found"})
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
@@ -241,6 +289,10 @@ func (h *Handlers) GetPersonByCity(c *gin.Context) {
 	people, err := h.DB.GetPersonByCity(city)
 	if err != nil {
 		log.Println(err)
+		return
+	} else if people == nil {
+		log.Println("No entry with that city found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that city found"})
 		return
 	}
 	c.JSON(http.StatusOK, people)
@@ -253,6 +305,10 @@ func (h *Handlers) GetPersonByState(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		return
+	} else if people == nil {
+		log.Println("No entry with that state found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that state found"})
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
@@ -264,20 +320,25 @@ func (h *Handlers) GetPersonByAbout(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		return
+	} else if people == nil {
+		log.Println("No entry with that \"about\" found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that \"about\" found"})
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByRegistered Returns all people with a specific registration
 func (h *Handlers) GetPersonByRegistered(c *gin.Context) {
-	registered, err := strconv.ParseBool(c.Param("registered"))
-	if err != nil {
-		log.Println(err)
-		return
-	}
+	registered := c.Param("registered")
+
 	people, err := h.DB.GetPersonByRegistered(registered)
 	if err != nil {
 		log.Println(err)
+		return
+	} else if people == nil {
+		log.Println("No entry with that registration time found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that registration time found"})
 		return
 	}
 	c.JSON(http.StatusOK, people)
@@ -290,6 +351,10 @@ func (h *Handlers) GetPersonByLatitude(c *gin.Context) {
 	if err != nil {
 		log.Println(err)
 		return
+	} else if people == nil {
+		log.Println("No entry with that latitude found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that latitude found"})
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
@@ -300,6 +365,10 @@ func (h *Handlers) GetPersonByLongitude(c *gin.Context) {
 	people, err := h.DB.GetPersonByLongitude(longitude)
 	if err != nil {
 		log.Println(err)
+		return
+	} else if people == nil {
+		log.Println("No entry with that longitude found")
+		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that longitude found"})
 		return
 	}
 	c.JSON(http.StatusOK, people)

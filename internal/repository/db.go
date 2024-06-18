@@ -35,15 +35,21 @@ func NewPostgresDB(host string, port int, user, password, dbname string) (*Postg
 	return &Postgres{db: openedDB}, err
 }
 
-func GetJson(filepath string) {
-	file, err := os.ReadFile(filepath)
-	if err != nil {
-		log.Fatal(err)
+func checkJson(filepath string) error {
+	if len(people) != 0 {
+		log.Println("Json has already been parsed")
+		return nil
+	} else {
+		file, err := os.ReadFile(filepath)
+		if err != nil {
+			return err
+		}
+		err = json.Unmarshal(file, &people)
+		if err != nil {
+			return err
+		}
 	}
-	err = json.Unmarshal(file, &people)
-	if err != nil {
-		log.Fatal(err)
-	}
+	return nil
 }
 
 // CreatePeople Check if table "people" exists. If not it will create the table and populate it
@@ -53,8 +59,11 @@ func (p *Postgres) CreatePeople() error {
 		log.Println("Table people already exists")
 		return nil
 	}
-
-	_, err := p.db.Exec("CREATE TABLE people(id varchar primary key, index int, guid varchar, is_active bool, balance varchar, picture varchar, age int, eye_color varchar, name_first varchar, name_last varchar, gender varchar, company varchar, email varchar, phone varchar, address_house_number int, address_street varchar, address_city varchar, address_state varchar, address_zip_code int, about varchar, registered varchar, latitude float8, longitude float8)")
+	err := checkJson("data/PersonalData.json")
+	if err != nil {
+		return err
+	}
+	_, err = p.db.Exec("CREATE TABLE people(id varchar primary key, index int, guid varchar, is_active bool, balance varchar, picture varchar, age int, eye_color varchar, name_first varchar, name_last varchar, gender varchar, company varchar, email varchar, phone varchar, address_house_number int, address_street varchar, address_city varchar, address_state varchar, address_zip_code int, about varchar, registered varchar, latitude float8, longitude float8)")
 	if err != nil {
 		return err
 	}
@@ -72,7 +81,11 @@ func (p *Postgres) CreateFriends() error {
 		log.Println("Table friends already exists")
 		return nil
 	}
-	_, err := p.db.Exec("CREATE TABLE friends(id varchar primary key, name_first varchar, name_last varchar)")
+	err := checkJson("data/PersonalData.json")
+	if err != nil {
+		return err
+	}
+	_, err = p.db.Exec("CREATE TABLE friends(id varchar primary key, name_first varchar, name_last varchar)")
 	if err != nil {
 		return err
 	}
@@ -90,7 +103,11 @@ func (p *Postgres) CreateMap() error {
 		log.Println("Table person already exists")
 		return nil
 	}
-	_, err := p.db.Exec(`CREATE TABLE person_friend_map(person_id varchar, friend_id varchar, CONSTRAINT person_id_FK FOREIGN KEY (person_id) REFERENCES people (id), CONSTRAINT friend_id_FK FOREIGN KEY (friend_id) REFERENCES friends (id))`)
+	err := checkJson("data/PersonalData.json")
+	if err != nil {
+		return err
+	}
+	_, err = p.db.Exec(`CREATE TABLE person_friend_map(person_id varchar, friend_id varchar, CONSTRAINT person_id_FK FOREIGN KEY (person_id) REFERENCES people (id), CONSTRAINT friend_id_FK FOREIGN KEY (friend_id) REFERENCES friends (id))`)
 	if err != nil {
 		return err
 	}
@@ -150,20 +167,15 @@ func (p *Postgres) insertMap(person model.Person) {
 
 func (p *Postgres) GetPeople() ([]model.Person, error) {
 	var people []model.Person
-	rows, err := p.db.Query("SELECT * FROM people")
+	row, err := p.db.Query("SELECT * FROM people")
 	if err != nil {
 		return nil, fmt.Errorf("query: %w", err)
 	}
-	defer func(rows *sql.Rows) {
-		err := rows.Close()
-		if err != nil {
+	defer row.Close()
 
-		}
-	}(rows)
-
-	for rows.Next() {
+	for row.Next() {
 		var a model.Person
-		err = rows.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+		err = row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 		if err != nil {
 			return nil, fmt.Errorf("row scan: %w", err)
 		}
@@ -172,12 +184,12 @@ func (p *Postgres) GetPeople() ([]model.Person, error) {
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByID(id int) (model.Person, error) {
+func (p *Postgres) GetPersonByID(id string) (model.Person, error) {
 	row := p.db.QueryRow("SELECT * FROM people WHERE id = $1", id)
 	if row.Err() != nil {
 		return model.Person{}, row.Err()
 	}
-
+	defer row.Scan()
 	var a model.Person
 
 	err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -188,18 +200,16 @@ func (p *Postgres) GetPersonByID(id int) (model.Person, error) {
 }
 
 func (p *Postgres) GetPersonByIndex(index int) (model.Person, error) {
-	row, err := p.db.Query("SELECT * FROM people WHERE index = $1", index)
-	if err != nil {
-		return model.Person{}, err
+	row := p.db.QueryRow("SELECT * FROM people WHERE index = $1", index)
+	if row.Err() != nil {
+		return model.Person{}, row.Err()
 	}
-
 	var a model.Person
 
-	err = row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
+	err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
 	if err != nil {
 		return model.Person{}, err
 	}
-	log.Println(a)
 	return a, nil
 }
 
@@ -210,7 +220,7 @@ func (p *Postgres) GetPersonByGUID(guid string) ([]model.Person, error) {
 	if err != nil {
 		return []model.Person{}, err
 	}
-
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -228,6 +238,7 @@ func (p *Postgres) GetPersonByIsActive(isActive bool) ([]model.Person, error) {
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -246,6 +257,7 @@ func (p *Postgres) GetPersonByBalance(balance string) ([]model.Person, error) {
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -264,6 +276,7 @@ func (p *Postgres) GetPersonByAge(age int) ([]model.Person, error) {
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -282,6 +295,7 @@ func (p *Postgres) GetPersonByEyeColor(eyeColor string) ([]model.Person, error) 
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -300,6 +314,7 @@ func (p *Postgres) GetPersonByFirstName(firstname string) ([]model.Person, error
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -318,6 +333,7 @@ func (p *Postgres) GetPersonByLastName(lastname string) ([]model.Person, error) 
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -336,6 +352,7 @@ func (p *Postgres) GetPersonByGender(gender string) ([]model.Person, error) {
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -354,6 +371,7 @@ func (p *Postgres) GetPersonByCompany(company string) ([]model.Person, error) {
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -402,6 +420,7 @@ func (p *Postgres) GetPersonByHouseNumber(houseNumber int) ([]model.Person, erro
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -420,6 +439,7 @@ func (p *Postgres) GetPersonByStreetName(streetName string) ([]model.Person, err
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -438,6 +458,7 @@ func (p *Postgres) GetPersonByZipCode(zipCode int) ([]model.Person, error) {
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -456,6 +477,7 @@ func (p *Postgres) GetPersonByCity(city string) ([]model.Person, error) {
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -474,6 +496,7 @@ func (p *Postgres) GetPersonByState(state string) ([]model.Person, error) {
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -492,6 +515,7 @@ func (p *Postgres) GetPersonByAbout(about string) ([]model.Person, error) {
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -503,13 +527,14 @@ func (p *Postgres) GetPersonByAbout(about string) ([]model.Person, error) {
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByRegistered(registered bool) ([]model.Person, error) {
+func (p *Postgres) GetPersonByRegistered(registered string) ([]model.Person, error) {
 	var people []model.Person
 
 	row, err := p.db.Query("SELECT * FROM people WHERE registered = $1", registered)
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -528,6 +553,7 @@ func (p *Postgres) GetPersonByLatitude(latitude string) ([]model.Person, error) 
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)
@@ -546,6 +572,7 @@ func (p *Postgres) GetPersonByLongitude(longitude string) ([]model.Person, error
 	if err != nil {
 		return []model.Person{}, err
 	}
+	defer row.Close()
 	for row.Next() {
 		var a model.Person
 		err := row.Scan(&a.ID, &a.Index, &a.GUID, &a.IsActive, &a.Balance, &a.Picture, &a.Age, &a.EyeColor, &a.Name.Firstname, &a.Name.Lastname, &a.Gender, &a.Company, &a.Email, &a.Phone, &a.Address.HouseNumber, &a.Address.Street, &a.Address.City, &a.Address.State, &a.Address.ZipCode, &a.About, &a.Registered, &a.Latitude, &a.Longitude)

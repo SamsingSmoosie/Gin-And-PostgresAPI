@@ -5,26 +5,30 @@ import (
 	"Gin-Postgres-API/router"
 	_ "github.com/lib/pq"
 	"log"
+	"os"
+	"strconv"
 )
 
 func main() {
-
-	db, err := repository.NewPostgresDB("localhost", 5432, "postgres", "TopSecret123!", "postgres")
+	port, err := strconv.Atoi(os.Getenv("DB_PORT"))
+	if err != nil {
+		log.Fatal(err)
+	}
+	db, err := repository.NewPostgresDB(os.Getenv("DB_HOST"), port, os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_NAME"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	repository.GetJson("data/PersonalData.json")
 	err = db.CreatePeople()
-	if err != nil {
+	if nil != err {
 		log.Fatal(err)
 	}
 	err = db.CreateFriends()
-	if err != nil {
+	if nil != err {
 		log.Fatal(err)
 	}
 	err = db.CreateMap()
-	if err != nil {
+	if nil != err {
 		log.Fatal(err)
 	}
 
