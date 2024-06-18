@@ -5,7 +5,12 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"strconv"
 )
+
+type Handlers struct {
+	DB *repository.Postgres
+}
 
 //var people []model.Person
 
@@ -24,8 +29,8 @@ func GetJson(filepath string) {
 */ //--------------------------------------------------------------------
 
 // GetPeople Returns all people
-func GetPeople(c *gin.Context) {
-	people, err := repository.Postgres.GetPeople()
+func (h *Handlers) GetPeople(c *gin.Context) {
+	people, err := h.DB.GetPeople()
 	if err != nil {
 		log.Println(err)
 	}
@@ -46,117 +51,147 @@ func GetPeople(c *gin.Context) {
 }*/
 
 // GetPersonByID Returns one specific person by ID
-func GetPersonByID(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByID()
+func (h *Handlers) GetPersonByID(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		log.Println(err)
+		return
+	}
+	people, err := h.DB.GetPersonByID(id)
+	if err != nil {
+		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByIndex Returns one specific person by Index
-func GetPersonByIndex(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByIndex()
-
+func (h *Handlers) GetPersonByIndex(c *gin.Context) {
+	index, err := strconv.Atoi(c.Param("index"))
 	if err != nil {
 		log.Println(err)
+		return
+	}
+	people, err := h.DB.GetPersonByIndex(index)
+	if err != nil {
+		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByGUID Returns every person with a specific GUID
-func GetPersonByGUID(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByGUID()
-
+func (h *Handlers) GetPersonByGUID(c *gin.Context) {
+	guid := c.Param("guid")
+	people, err := h.DB.GetPersonByGUID(guid)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByIsActive Returns all people that are active or inactive, depending on input
-func GetPersonByIsActive(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByIsActive()
-
+func (h *Handlers) GetPersonByIsActive(c *gin.Context) {
+	isActive, err := strconv.ParseBool(c.Param("is_active"))
 	if err != nil {
 		log.Println(err)
+		return
+	}
+	people, err := h.DB.GetPersonByIsActive(isActive)
+	if err != nil {
+		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByBalance Returns all people with a specific balance
-func GetPersonByBalance(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByBalance()
-
+func (h *Handlers) GetPersonByBalance(c *gin.Context) {
+	balance := c.Param("balance")
+	people, err := h.DB.GetPersonByBalance(balance)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByAge Returns all people with a specific age
-func GetPersonByAge(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByAge()
+func (h *Handlers) GetPersonByAge(c *gin.Context) {
+	age, err := strconv.Atoi(c.Param("age"))
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	people, err := h.DB.GetPersonByAge(age)
 
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByEyeColor Returns all people with a specific eyecolor
-func GetPersonByEyeColor(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByEyeColor()
-
+func (h *Handlers) GetPersonByEyeColor(c *gin.Context) {
+	eyeColor := c.Param("eye_color")
+	people, err := h.DB.GetPersonByEyeColor(eyeColor)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByFirstName Returns all people with a specific firstname
-func GetPersonByFirstName(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByFirstName()
-
+func (h *Handlers) GetPersonByFirstName(c *gin.Context) {
+	firstName := c.Param("first_name")
+	people, err := h.DB.GetPersonByFirstName(firstName)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByLastName Returns all people with a specific lastname
-func GetPersonByLastName(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByLastName()
-
+func (h *Handlers) GetPersonByLastName(c *gin.Context) {
+	lastName := c.Param("last_name")
+	people, err := h.DB.GetPersonByLastName(lastName)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByGender Returns all people with a specific gender
-func GetPersonByGender(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByGender()
-
+func (h *Handlers) GetPersonByGender(c *gin.Context) {
+	gender := c.Param("gender")
+	people, err := h.DB.GetPersonByGender(gender)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByCompany Returns all people working for a specific company
-func GetPersonByCompany(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByCompany()
-
+func (h *Handlers) GetPersonByCompany(c *gin.Context) {
+	company := c.Param("company")
+	people, err := h.DB.GetPersonByCompany(company)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByEmail Returns the person with the specified email address
-func GetPersonByEmail(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByEmail()
+func (h *Handlers) GetPersonByEmail(c *gin.Context) {
+	email := c.Param("email")
+	people, err := h.DB.GetPersonByEmail(email)
 
 	if err != nil {
 		log.Println(err)
@@ -165,101 +200,123 @@ func GetPersonByEmail(c *gin.Context) {
 }
 
 // GetPersonByPhoneNumber Returns the person with the specified phone number
-func GetPersonByPhoneNumber(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByPhoneNumber()
-
+func (h *Handlers) GetPersonByPhoneNumber(c *gin.Context) {
+	phoneNumber := c.Param("phone_number")
+	people, err := h.DB.GetPersonByPhoneNumber(phoneNumber)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByHousenumber Returns all people with a specific address
-func GetPersonByHousenumber(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByHouseNumber()
-
+func (h *Handlers) GetPersonByHousenumber(c *gin.Context) {
+	housenumber, err := strconv.Atoi(c.Param("housenumber"))
 	if err != nil {
 		log.Println(err)
+		return
+	}
+	people, err := h.DB.GetPersonByHouseNumber(housenumber)
+	if err != nil {
+		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByStreetname Returns all people with a specific streetname
-func GetPersonByStreetname(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByStreetName()
-
+func (h *Handlers) GetPersonByStreetname(c *gin.Context) {
+	streetname := c.Param("streetname")
+	people, err := h.DB.GetPersonByStreetName(streetname)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByZipcode Returns all people with a specific address
-func GetPersonByZipcode(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByZipCode()
-
+func (h *Handlers) GetPersonByZipcode(c *gin.Context) {
+	zipcode, err := strconv.Atoi(c.Param("zipcode"))
 	if err != nil {
 		log.Println(err)
+		return
+	}
+	people, err := h.DB.GetPersonByZipCode(zipcode)
+	if err != nil {
+		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByCity Returns all people with a specific city
-func GetPersonByCity(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByCity()
-
+func (h *Handlers) GetPersonByCity(c *gin.Context) {
+	city := c.Param("city")
+	people, err := h.DB.GetPersonByCity(city)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByState Returns all people with a specific address
-func GetPersonByState(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByState()
-
+func (h *Handlers) GetPersonByState(c *gin.Context) {
+	state := c.Param("state")
+	people, err := h.DB.GetPersonByState(state)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByAbout Returns all people with a specific about
-func GetPersonByAbout(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByAbout()
-
+func (h *Handlers) GetPersonByAbout(c *gin.Context) {
+	about := c.Param("about")
+	people, err := h.DB.GetPersonByAbout(about)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByRegistered Returns all people with a specific registration
-func GetPersonByRegistered(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByRegistered()
-
+func (h *Handlers) GetPersonByRegistered(c *gin.Context) {
+	registered, err := strconv.ParseBool(c.Param("registered"))
 	if err != nil {
 		log.Println(err)
+		return
+	}
+	people, err := h.DB.GetPersonByRegistered(registered)
+	if err != nil {
+		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByLatitude Returns all people with a specific latitude
-func GetPersonByLatitude(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByLatitude()
-
+func (h *Handlers) GetPersonByLatitude(c *gin.Context) {
+	latitude := c.Param("latitude")
+	people, err := h.DB.GetPersonByLatitude(latitude)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }
 
 // GetPersonByLongitude Returns all people with a specific longitude
-func GetPersonByLongitude(c *gin.Context) {
-	people, err := repository.Postgres.GetPersonByLongitude()
-
+func (h *Handlers) GetPersonByLongitude(c *gin.Context) {
+	longitude := c.Param("longitude")
+	people, err := h.DB.GetPersonByLongitude(longitude)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	c.JSON(http.StatusOK, people)
 }

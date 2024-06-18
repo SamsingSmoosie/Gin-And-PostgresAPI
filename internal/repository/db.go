@@ -4,10 +4,7 @@ import (
 	"Gin-Postgres-API/internal/model"
 	"database/sql"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
-	"net/http"
-	"strconv"
 )
 
 type Postgres struct {
@@ -136,7 +133,7 @@ func (p *Postgres) insertMap(person model.Person) {
 	}
 }
 
-func (p *Postgres) GetPeople(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPeople() ([]model.Person, error) {
 	var people []model.Person
 	rows, err := p.db.Query("SELECT * FROM people")
 	if err != nil {
@@ -157,16 +154,12 @@ func (p *Postgres) GetPeople(c *gin.Context) ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByID(c *gin.Context) (model.Person, error) {
-	db := p.db
-	id := c.Param("id")
-	row := db.QueryRow("SELECT * FROM people WHERE id = $1", id)
+func (p *Postgres) GetPersonByID(id int) (model.Person, error) {
+	row := p.db.QueryRow("SELECT * FROM people WHERE id = $1", id)
 	if row.Err() != nil {
-		c.Status(500)
 		log.Println(row.Err())
 	}
 
@@ -176,17 +169,12 @@ func (p *Postgres) GetPersonByID(c *gin.Context) (model.Person, error) {
 	if err != nil {
 		log.Println(err)
 	}
-	c.JSON(http.StatusOK, a)
 	return a, nil
 }
 
-func (p *Postgres) GetPersonByIndex(c *gin.Context) (model.Person, error) {
-	db := p.db
-	index, _ := strconv.Atoi(c.Param("index"))
-
-	row, err := db.Query("SELECT * FROM people WHERE index = $1", index)
+func (p *Postgres) GetPersonByIndex(index int) (model.Person, error) {
+	row, err := p.db.Query("SELECT * FROM people WHERE index = $1", index)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 
@@ -196,18 +184,14 @@ func (p *Postgres) GetPersonByIndex(c *gin.Context) (model.Person, error) {
 	if err != nil {
 		log.Println(err)
 	}
-	c.JSON(http.StatusOK, a)
 	return a, nil
 }
 
-func (p *Postgres) GetPersonByGUID(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByGUID(guid string) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	guid := c.Param("guid")
 
-	row, err := db.Query("SELECT * FROM people WHERE guid = $1", guid)
+	row, err := p.db.Query("SELECT * FROM people WHERE guid = $1", guid)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 
@@ -219,18 +203,13 @@ func (p *Postgres) GetPersonByGUID(c *gin.Context) ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByIsActive(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByIsActive(isActive bool) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	isActive, _ := strconv.ParseBool(c.Param("isActive"))
-
-	row, err := db.Query("SELECT * FROM people WHERE is_active = $1", isActive)
+	row, err := p.db.Query("SELECT * FROM people WHERE is_active = $1", isActive)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -241,18 +220,14 @@ func (p *Postgres) GetPersonByIsActive(c *gin.Context) ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByBalance(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByBalance(balance string) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	balance, _ := strconv.ParseBool(c.Param("balance"))
 
-	row, err := db.Query("SELECT * FROM people WHERE balance = $1", balance)
+	row, err := p.db.Query("SELECT * FROM people WHERE balance = $1", balance)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -263,18 +238,14 @@ func (p *Postgres) GetPersonByBalance(c *gin.Context) ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByAge(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByAge(age int) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	age, _ := strconv.ParseBool(c.Param("age"))
 
-	row, err := db.Query("SELECT * FROM people WHERE age = $1", age)
+	row, err := p.db.Query("SELECT * FROM people WHERE age = $1", age)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -285,18 +256,14 @@ func (p *Postgres) GetPersonByAge(c *gin.Context) ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByEyeColor(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByEyeColor(eyeColor string) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	eyeColor, _ := strconv.ParseBool(c.Param("eyeColor"))
 
-	row, err := db.Query("SELECT * FROM people WHERE eye_color = $1", eyeColor)
+	row, err := p.db.Query("SELECT * FROM people WHERE eye_color = $1", eyeColor)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -307,18 +274,14 @@ func (p *Postgres) GetPersonByEyeColor(c *gin.Context) ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByFirstName(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByFirstName(firstname string) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	firstname, _ := strconv.ParseBool(c.Param("firstname"))
 
-	row, err := db.Query("SELECT * FROM people WHERE name_first = $1", firstname)
+	row, err := p.db.Query("SELECT * FROM people WHERE name_first = $1", firstname)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -329,18 +292,14 @@ func (p *Postgres) GetPersonByFirstName(c *gin.Context) ([]model.Person, error) 
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByLastName(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByLastName(lastname string) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	lastname, _ := strconv.ParseBool(c.Param("lastname"))
 
-	row, err := db.Query("SELECT * FROM people WHERE name_last = $1", lastname)
+	row, err := p.db.Query("SELECT * FROM people WHERE name_last = $1", lastname)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -351,18 +310,14 @@ func (p *Postgres) GetPersonByLastName(c *gin.Context) ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByGender(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByGender(gender string) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	gender, _ := strconv.ParseBool(c.Param("gender"))
 
-	row, err := db.Query("SELECT * FROM people WHERE gender = $1", gender)
+	row, err := p.db.Query("SELECT * FROM people WHERE gender = $1", gender)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -373,18 +328,14 @@ func (p *Postgres) GetPersonByGender(c *gin.Context) ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByCompany(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByCompany(company string) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	company, _ := strconv.ParseBool(c.Param("company"))
 
-	row, err := db.Query("SELECT * FROM people WHERE company = $1", company)
+	row, err := p.db.Query("SELECT * FROM people WHERE company = $1", company)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -395,16 +346,12 @@ func (p *Postgres) GetPersonByCompany(c *gin.Context) ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByEmail(c *gin.Context) (model.Person, error) {
-	db := p.db
-	email := c.Param("email")
-	row := db.QueryRow("SELECT * FROM people WHERE email = $1", email)
+func (p *Postgres) GetPersonByEmail(email string) (model.Person, error) {
+	row := p.db.QueryRow("SELECT * FROM people WHERE email = $1", email)
 	if row.Err() != nil {
-		c.Status(500)
 		log.Println(row.Err())
 	}
 
@@ -414,16 +361,12 @@ func (p *Postgres) GetPersonByEmail(c *gin.Context) (model.Person, error) {
 	if err != nil {
 		log.Println(err)
 	}
-	c.JSON(http.StatusOK, a)
 	return a, nil
 }
 
-func (p *Postgres) GetPersonByPhoneNumber(c *gin.Context) (model.Person, error) {
-	db := p.db
-	phoneNumber := c.Param("phone")
-	row := db.QueryRow("SELECT * FROM people WHERE phone = $1", phoneNumber)
+func (p *Postgres) GetPersonByPhoneNumber(phoneNumber string) (model.Person, error) {
+	row := p.db.QueryRow("SELECT * FROM people WHERE phone = $1", phoneNumber)
 	if row.Err() != nil {
-		c.Status(500)
 		log.Println(row.Err())
 	}
 
@@ -433,18 +376,14 @@ func (p *Postgres) GetPersonByPhoneNumber(c *gin.Context) (model.Person, error) 
 	if err != nil {
 		log.Println(err)
 	}
-	c.JSON(http.StatusOK, a)
 	return a, nil
 }
 
-func (p *Postgres) GetPersonByHouseNumber(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByHouseNumber(houseNumber int) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	houseNumber, _ := strconv.ParseBool(c.Param("housenumber"))
 
-	row, err := db.Query("SELECT * FROM people WHERE address_house_number = $1", houseNumber)
+	row, err := p.db.Query("SELECT * FROM people WHERE address_house_number = $1", houseNumber)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -455,18 +394,14 @@ func (p *Postgres) GetPersonByHouseNumber(c *gin.Context) ([]model.Person, error
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByStreetName(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByStreetName(streetName string) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	streetName, _ := strconv.ParseBool(c.Param("streetname"))
 
-	row, err := db.Query("SELECT * FROM people WHERE address_street = $1", streetName)
+	row, err := p.db.Query("SELECT * FROM people WHERE address_street = $1", streetName)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -477,18 +412,14 @@ func (p *Postgres) GetPersonByStreetName(c *gin.Context) ([]model.Person, error)
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByZipCode(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByZipCode(zipCode int) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	zipCode, _ := strconv.ParseBool(c.Param("zipcode"))
 
-	row, err := db.Query("SELECT * FROM people WHERE address_zip_code = $1", zipCode)
+	row, err := p.db.Query("SELECT * FROM people WHERE address_zip_code = $1", zipCode)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -499,18 +430,14 @@ func (p *Postgres) GetPersonByZipCode(c *gin.Context) ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByCity(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByCity(city string) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	city, _ := strconv.ParseBool(c.Param("city"))
 
-	row, err := db.Query("SELECT * FROM people WHERE address_city = $1", city)
+	row, err := p.db.Query("SELECT * FROM people WHERE address_city = $1", city)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -521,18 +448,14 @@ func (p *Postgres) GetPersonByCity(c *gin.Context) ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByState(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByState(state string) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	state, _ := strconv.ParseBool(c.Param("state"))
 
-	row, err := db.Query("SELECT * FROM people WHERE address_state = $1", state)
+	row, err := p.db.Query("SELECT * FROM people WHERE address_state = $1", state)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -543,18 +466,14 @@ func (p *Postgres) GetPersonByState(c *gin.Context) ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByAbout(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByAbout(about string) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	about, _ := strconv.ParseBool(c.Param("about"))
 
-	row, err := db.Query("SELECT * FROM people WHERE about = $1", about)
+	row, err := p.db.Query("SELECT * FROM people WHERE about = $1", about)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -565,18 +484,14 @@ func (p *Postgres) GetPersonByAbout(c *gin.Context) ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByRegistered(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByRegistered(registered bool) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	registered, _ := strconv.ParseBool(c.Param("registered"))
 
-	row, err := db.Query("SELECT * FROM people WHERE registered = $1", registered)
+	row, err := p.db.Query("SELECT * FROM people WHERE registered = $1", registered)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -587,18 +502,14 @@ func (p *Postgres) GetPersonByRegistered(c *gin.Context) ([]model.Person, error)
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByLatitude(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByLatitude(latitude string) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	latitude, _ := strconv.ParseBool(c.Param("latitude"))
 
-	row, err := db.Query("SELECT * FROM people WHERE latitude = $1", latitude)
+	row, err := p.db.Query("SELECT * FROM people WHERE latitude = $1", latitude)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -609,18 +520,14 @@ func (p *Postgres) GetPersonByLatitude(c *gin.Context) ([]model.Person, error) {
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
 
-func (p *Postgres) GetPersonByLongitude(c *gin.Context) ([]model.Person, error) {
+func (p *Postgres) GetPersonByLongitude(longitude string) ([]model.Person, error) {
 	var people []model.Person
-	db := p.db
-	longitude, _ := strconv.ParseBool(c.Param("longitude"))
 
-	row, err := db.Query("SELECT * FROM people WHERE longitude = $1", longitude)
+	row, err := p.db.Query("SELECT * FROM people WHERE longitude = $1", longitude)
 	if err != nil {
-		c.Status(500)
 		log.Println(err)
 	}
 	for row.Next() {
@@ -631,6 +538,5 @@ func (p *Postgres) GetPersonByLongitude(c *gin.Context) ([]model.Person, error) 
 		}
 		people = append(people, a)
 	}
-	c.JSON(http.StatusOK, people)
 	return people, nil
 }
