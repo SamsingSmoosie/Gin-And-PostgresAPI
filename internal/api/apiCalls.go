@@ -321,8 +321,8 @@ func (h *Handlers) GetPersonByAbout(c *gin.Context) {
 		log.Println(err)
 		return
 	} else if people == nil {
-		log.Println("No entry with that \"about\" found")
-		c.JSON(http.StatusNotFound, gin.H{"message": "No entry with that \"about\" found"})
+		log.Println(`No entry with that "about" found`)
+		c.JSON(http.StatusNotFound, gin.H{"message": `No entry with that "about" found`})
 		return
 	}
 	c.JSON(http.StatusOK, people)

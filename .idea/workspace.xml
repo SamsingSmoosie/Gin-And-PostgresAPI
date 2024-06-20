@@ -4,14 +4,13 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02099c54-d91a-4af9-bfb3-a0e91e627d95" name="Changes" comment="- Fixed error handeling in main">
-      <changelist_data name="Leonardo Pagel" email="leonardo.pagel@proton.me" />
+    <list default="true" id="02099c54-d91a-4af9-bfb3-a0e91e627d95" name="Changes" comment="- Changed status feedback messages">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/398d1a74-b201-4c4e-b0bc-4723445979ac/storage_v2/_src_/database/postgres.edMnLQ/schema/public.abK9xQ.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/api/apiCalls.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/api/apiCalls.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/repository/db.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/db.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +62,7 @@
   "keyToString": {
     "DefaultGoTemplateProperty": "Go File",
     "Docker.docker-compose.yml: Compose Deployment.executor": "Run",
-    "Go Build.go build Gin-Postgres-API.executor": "Debug",
+    "Go Build.go build Gin-Postgres-API.executor": "Run",
     "Go Build.go build Gin-Postgres-API/src.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -202,55 +201,10 @@
     <MESSAGE value="- Everything is awesome&#10;- Most the API is abled to startup&#10;- The API responds to requests&#10;- TODO: Add auto population of DB&#10;- TODO: Add friends structs and references" />
     <MESSAGE value="- Added check for DB population and automatic population in case of it being empty&#10;- Improved Error handeling in db.go" />
     <MESSAGE value="- Fixed error handeling in main" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Fixed error handeling in main" />
+    <MESSAGE value="- Changed status feedback messages" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Changed status feedback messages" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/internal/repository/db.go</url>
-          <line>290</line>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/internal/repository/db.go</url>
-          <line>306</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/internal/repository/db.go</url>
-          <line>186</line>
-          <option name="timeStamp" value="26" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/internal/repository/db.go</url>
-          <line>187</line>
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/internal/repository/db.go</url>
-          <line>189</line>
-          <option name="timeStamp" value="28" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/internal/repository/db.go</url>
-          <line>194</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/internal/repository/db.go</url>
-          <line>198</line>
-          <option name="timeStamp" value="30" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/internal/api/apiCalls.go</url>
-          <line>40</line>
-          <option name="timeStamp" value="36" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
